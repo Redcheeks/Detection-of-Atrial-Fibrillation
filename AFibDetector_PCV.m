@@ -8,7 +8,7 @@ classdef AFibDetector_PCV
     end
     
     methods
-        function obj = AFibDetector_PCV(DataVector, window)
+        function [obj, pcvVector] = AFibDetector_PCV(DataVector, window)
             %AFIBDETECTOR Creates and Trains a AFibDetector.
             %   
             obj.window = window;
@@ -16,13 +16,13 @@ classdef AFibDetector_PCV
             
             pcv_true = [];
             pcv_false = [];
-            
+            pcvVector = cell(4);
             
             for data_set = 1:length(DataVector) %for each training data
 %             figure
 %             hold on;
             %sliding window/ for each window position
-                for window_start = 0 : 9000/(window-1) %end window before data ends
+                for window_start = 0 : DataVector{data_set}.qrs(end)/1000 - (window) %end window before data ends
                 
                     %for each window, look at contents
                     % pick which datapoints (index) in the window
@@ -35,6 +35,8 @@ classdef AFibDetector_PCV
                     m = mean(local_rr);
                     
                     Pcv = S/m;
+                    pcvVector{data_set}(end+1)= Pcv;
+                    
                     %plot(int64(mean(indexes)), Pcv, '*')
                     
                     if(center_tag)
@@ -65,16 +67,17 @@ classdef AFibDetector_PCV
         
         
         %% Detector Testing - returns detectedRR
-        function detectRRVector = AFibTesting(obj,Data)
+        function [detectRRVector, pcvVector] = AFibTesting(obj,Data)
             %AFIBTESTING Tests the detector using input DataVector
             %input wants one testdata cell-array
             
             % -------- RUN DETECTOR --------
             
             detectRRVector = zeros(size(Data.targetsRR));
+            pcvVector = [];
             
             %sliding window/ for each window position
-                for window_start = 0 : 9000/(obj.window-1) %end window before data ends
+                for window_start = 0 : Data.qrs(end)/1000 - (obj.window) %end window before data ends
                 
                     %for each window, look at contents
                     % pick which datapoints (index) in the window
@@ -86,6 +89,7 @@ classdef AFibDetector_PCV
                     m = mean(local_rr);
                     
                     Pcv = S/m;
+                    pcvVector(end+1)= Pcv;
                     
                     
                     if(Pcv > obj.threshold)
