@@ -102,30 +102,15 @@ ylabel('P_{cv} value');
 
 %% Sensitivity
 
-diff = AFDB1.targetsRR - OutputRR(1)
+diff = AFDB5.targetsRR - OutputRR{1}
 
-FN = 0;
-TN = 0;
-TP = 0;
-FP = 0;
-for i=1:length(diff)
-    if diff(i) > 0
-        FN = FN + 1;
-    elseif diff(i) < 0 
-        FP = FP + 0; 
-    else 
-        % Both true pos and true neg will be 0
-        if AFDB1.targetsRR(i) == 1
-            TP = TP + 1;
-        elseif AFDB1.targetsRR(i) == 0
-            TN = TN + 1;
-        end 
-    end
-end
+FN = sum(diff>0, 'all');
+FP = sum(diff<0, 'all');
 
+TN = sum(OutputRR{1} == 0) - FN;
+TP = sum(OutputRR{1} == 1) - FP;
 
-Sensitivity_i = TP / (length(OutputRR(1)) - sum(OutputRR(1) - (length(AFDB1.targetsRR) - TP) ))
-
-%% Specificity
+Sensitivity = TP / (TP + FN)
+Specificity = TN / (FP + TN)
 
 
