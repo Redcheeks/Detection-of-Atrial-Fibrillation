@@ -17,31 +17,35 @@ AFDB7 = load('AF_RR_intervals/afdb_7.mat');
 DataVector{7} = AFDB7;
 
 %% Visualize data
+
 figure(1)
 plot(AFDB1.rr, 'b')
+hold on;
 
 for iter = 1:size((AFDB1.targetsRR),2)
     if(AFDB1.targetsRR(iter) == 1)
-        plot(iter,0, 'r*')
+        plot(iter,0, 'r')
     end
         
 end
-%% Run detector and evaluate
+
+%% Run PCV detector and evaluate
 
 % Create Detector with training data;
-window = 5;
-AFDetector = AFibDetector([AFDB1,AFDB2, AFDB3, AFDB4], window);
+window = 5; %in seconds
+AFDetector_PCV = AFibDetector([AFDB1,AFDB2, AFDB3, AFDB4], window);
 
+FeatureSelection(AFDetector_PCV, features, window)
 % Test detector with all the data;
 
 
 OutputRR = {1:7};
 
 for j = 1:7 
-  OutputRR{j} = AFibTesting(AFDetector,DataVector{j});
-    
+  OutputRR{j} = AFibTesting(AFDetector_PCV,DataVector{j});
 end
 
 
 %% Evaluate
+
 

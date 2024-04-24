@@ -3,24 +3,26 @@ classdef AFibDetector
     %   Detailed explanation goes here
     
     properties
-        features
+        threshold
+        window
     end
     
     methods
-        function obj = AFibDetector(DataVector, FeatNumber)
+        function obj = AFibDetector(DataVector, Window)
             %AFIBDETECTOR Creates and Trains a AFibDetector.
             %   
             
             %obj.features = FeatureSelection(DataVector, FeatNumber);
             
         end
-        %% Feature Selection
-        function feats = FeatureSelection(Data, FeatNumber)
+        %% Feature Selection / Threshold
+        function feats = FeatureSelection(obj, thresh, window)
             % Feature Selection.
-            % FeatNumber amount of features
+            % 
             
             
-            feats = {};
+            obj.threshold = thresh;
+            obj.window = window;
         end
         
         
