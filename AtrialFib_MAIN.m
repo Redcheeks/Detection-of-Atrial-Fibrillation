@@ -80,8 +80,6 @@ xlabel('Time s');
 ylabel('P_{cv} value');
 
 
-
-
 figure(4);
 clf
 for i = 1:length(TestVector)
