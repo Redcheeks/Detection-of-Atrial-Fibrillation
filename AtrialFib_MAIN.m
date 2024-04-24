@@ -30,18 +30,25 @@ for iter = 1:size((AFDB3.targetsRR),2)
         
 end
 
-%% Run PCV detector and evaluate
+%% Run PCV detector
 
 % Create Detector with training data;
 window = 10; %in seconds
 AFDetector_PCV = AFibDetector_PCV(TrainingVector, window);
 
 
-FeatureSelection(AFDetector_PCV, 0, window)
-% Test detector with all the data;
+%manually evaluate histogram and choose threshold
+
+threshold = 0.2;
+
+FeatureSelection(AFDetector_PCV, threshold);
 
 
-OutputRR = {1:7};
+
+%% Test detector with testing data;
+
+
+OutputRR = {length(TestVector)};
 
 for j = 1:length(TestVector) 
   OutputRR{j} = AFibTesting(AFDetector_PCV,TestVector{j});

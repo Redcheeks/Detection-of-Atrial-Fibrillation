@@ -3,7 +3,7 @@ classdef AFibDetector_PCV
     %   Detailed explanation goes here
     
     properties
-        threshold = 0;
+        threshold;
         window
     end
     
@@ -12,6 +12,7 @@ classdef AFibDetector_PCV
             %AFIBDETECTOR Creates and Trains a AFibDetector.
             %   
             obj.window = window;
+            obj.threshold = 0;
             
             pcv_true = [];
             pcv_false = [];
@@ -66,10 +67,37 @@ classdef AFibDetector_PCV
         %% Detector Testing - returns detectedRR
         function detectRRVector = AFibTesting(obj,Data)
             %AFIBTESTING Tests the detector using input DataVector
-            %   
+            %input wants one testdata cell-array
             
             % -------- RUN DETECTOR --------
-            detectRRVector = Data.targetsRR;
+            
+            detectRRVector = zeros(size(Data.targetsRR));
+            
+            %sliding window/ for each window position
+                for window_start = 0 : 9000/(obj.window-1) %end window before data ends
+                
+                    %for each window, look at contents
+                    % pick which datapoints (index) in the window
+                    indexes = find(Data.qrs>window_start*1000 & Data.qrs<(window_start+obj.window)*1000);
+        
+                    local_rr = Data.rr(indexes);
+                    
+                    S = std(local_rr);
+                    m = mean(local_rr);
+                    
+                    Pcv = S/m;
+                    
+                    
+                    if(Pcv > obj.threshold)
+                        detectRRVector(int64(mean(indexes))) = 1;
+                    end
+                      
+                end
+                
+            end
+            
+            
+            detectRRVector;
             
         end
             end
