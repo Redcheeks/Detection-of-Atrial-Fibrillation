@@ -34,7 +34,7 @@ end
 
 % Create Detector with training data;
 window = 10; %in seconds
-AFDetector_PCV = AFibDetector_PCV(TrainingVector, window);
+[AFDetector_PCV, PcvVector] = AFibDetector_PCV(TrainingVector, window);
 
 
 %manually evaluate histogram and choose threshold
@@ -56,5 +56,23 @@ end
 
 
 %% Evaluate
+
+figure(3)
+clf
+for i = 1:length(TrainingVector)
+    subplot(2,2,i)
+    plot(PcvVector{i}, 'b-')
+    hold on;
+    x = linspace(0, ceil(TrainingVector{i}.qrs(end)./1000), length(TrainingVector{i}.targetsQRS));
+    plot(x,TrainingVector{i}.targetsQRS, 'r-');
+    yline(threshold, 'k-.');
+end
+
+
+
+
+
+
+
 
 
