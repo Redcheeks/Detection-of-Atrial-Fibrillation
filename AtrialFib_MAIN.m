@@ -19,11 +19,12 @@ TestVector{3} = AFDB7;
 %% Visualize data
 
 figure(1)
-plot(AFDB1.rr, 'b')
+clf
+plot(AFDB3.rr, 'b')
 hold on;
 
-for iter = 1:size((AFDB1.targetsRR),2)
-    if(AFDB1.targetsRR(iter) == 1)
+for iter = 1:size((AFDB3.targetsRR),2)
+    if(AFDB3.targetsRR(iter) == 1)
         plot(iter,0, 'r*')
     end
         
@@ -32,10 +33,11 @@ end
 %% Run PCV detector and evaluate
 
 % Create Detector with training data;
-window = 5; %in seconds
-AFDetector_PCV = AFibDetector(TrainingVector, window);
+window = 10; %in seconds
+AFDetector_PCV = AFibDetector_PCV(TrainingVector, window);
 
-FeatureSelection(AFDetector_PCV, threshold_manual, window)
+
+FeatureSelection(AFDetector_PCV, 0, window)
 % Test detector with all the data;
 
 
