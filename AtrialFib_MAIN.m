@@ -9,12 +9,17 @@ AFDB3 = load('AF_RR_intervals/afdb_3.mat');
 TrainingVector{3} = AFDB3;
 AFDB4 = load('AF_RR_intervals/afdb_4.mat');
 TrainingVector{4} = AFDB4;
+TestVector{1} = TrainingVector{1};
+TestVector{2} = TrainingVector{2};
+TestVector{3} = TrainingVector{3};
+TestVector{4} = TrainingVector{4};
+
 AFDB5 = load('AF_RR_intervals/afdb_5.mat');
-TestVector{1} = AFDB5;
+TestVector{5} = AFDB5;
 AFDB6 = load('AF_RR_intervals/afdb_6.mat');
-TestVector{2} = AFDB6;
+TestVector{6} = AFDB6;
 AFDB7 = load('AF_RR_intervals/afdb_7.mat');
-TestVector{3} = AFDB7;
+TestVector{7} = AFDB7;
 
 %% Visualize data
 
@@ -82,8 +87,8 @@ ylabel('P_{cv} value');
 
 figure(4);
 clf
-for i = 1:length(TestVector)
-    ax(i) = subplot(2,2,i);
+for i = 5:length(TestVector)   
+    ax(i) = subplot(2,2,i-3);
     
     plot(OutPcv{i}, 'b-')
     hold on;
@@ -100,16 +105,29 @@ legend('Pcv value', 'TargetRR', 'Threshold');
 xlabel('Time s');
 ylabel('P_{cv} value');
 
-%% Sensitivity
+%% Performance meassure
 
-diff = AFDB5.targetsRR - OutputRR{1}
 
-FN = sum(diff>0, 'all');
-FP = sum(diff<0, 'all');
+FN_tot = {};
+FP_tot = {};
+TN_tot = {};
+TP_tot = {};
 
-TN = sum(OutputRR{1} == 0) - FN;
-TP = sum(OutputRR{1} == 1) - FP;
+for set_nbr = 1 : length(OutputRR) 
+    curr_dataset = sprintf('AFDB%d', set_nbr) %funkar inte riktigt än
+    diff = curr_dataset.targetsRR - OutputRR{set_nbr}
+    
 
+    FN_tot(end+1) = sum(diff>0, 'all');
+    FP_tot(end+1) = sum(diff<0, 'all');
+
+    TN_tot(end+1) = sum(OutputRR{1} == 0) - FN_tot(set_nbr);
+    TP_tot(end+1) = sum(OutputRR{1} == 1) - FP_tot(set_nbr);
+
+end
+
+% fixa sensitivity och specificity i en vektor för performance meassures i
+% loopen ovan
 Sensitivity = TP / (TP + FN)
 Specificity = TN / (FP + TN)
 
