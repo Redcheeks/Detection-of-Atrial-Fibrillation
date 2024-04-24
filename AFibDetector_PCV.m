@@ -97,9 +97,7 @@ classdef AFibDetector_PCV
                     end
                       
                 end
-            
-            
-            detectRRVector;
+      
             
         end
        end

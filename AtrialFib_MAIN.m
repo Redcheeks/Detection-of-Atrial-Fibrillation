@@ -48,10 +48,12 @@ FeatureSelection(AFDetector_PCV, threshold);
 %% Test detector with testing data;
 
 
-OutputRR = {length(TestVector)}; %contains [detectRRVector, pcvVector] for each data_set
+OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
+OutPcv = cell(length(TestVector),1);
 
 for j = 1:length(TestVector) 
-  OutputRR{j} = AFibTesting(AFDetector_PCV,TestVector{j});
+    
+  [OutputRR{j}, OutPcv{j}] = AFibTesting(AFDetector_PCV,TestVector{j});
 end
 
 
@@ -61,7 +63,6 @@ figure(3);
 clf
 for i = 1:length(TrainingVector)
     ax(i) = subplot(2,2,i);
-    
     
     plot(PcvVector{i}, 'b-')
     hold on;
@@ -81,7 +82,25 @@ ylabel('P_{cv} value');
 
 
 
-
+figure(4);
+clf
+for i = 1:length(TestVector)
+    ax(i) = subplot(2,2,i);
+    
+    plot(OutPcv{i}, 'b-')
+    hold on;
+    x = linspace(0, ceil(TestVector{i}.qrs(end)./1000), length(TestVector{i}.targetsQRS));
+    plot(x,TestVector{i}.targetsQRS*0.2, 'r-');
+    yline(threshold, 'k-.');
+    ylim([0 0.5])
+    xlabel('Time s');
+    ylabel('P_{cv} value');
+    title('Testing Set ' + string(i))
+end
+linkaxes(ax,'xy')
+legend('Pcv value', 'TargetRR', 'Threshold');
+xlabel('Time s');
+ylabel('P_{cv} value');
 
 
 
