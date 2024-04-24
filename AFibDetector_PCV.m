@@ -93,14 +93,12 @@ classdef AFibDetector_PCV
                     end
                       
                 end
-                
-            end
             
             
             detectRRVector;
             
         end
-            end
+       end
 
 end
 
