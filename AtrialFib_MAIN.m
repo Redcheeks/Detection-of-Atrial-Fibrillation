@@ -107,28 +107,29 @@ ylabel('P_{cv} value');
 
 %% Performance meassure
 
-
-FN_tot = {};
-FP_tot = {};
-TN_tot = {};
-TP_tot = {};
+FN_tot = cell(length(TestVector),1);
+FP_tot = cell(length(TestVector),1);
+TN_tot = cell(length(TestVector),1);
+TP_tot = cell(length(TestVector),1);
+performance = cell([length(TestVector)+1, 2]); %sensitivity for first column and specificity for second col
 
 for set_nbr = 1 : length(OutputRR) 
-    curr_dataset = sprintf('AFDB%d', set_nbr) %funkar inte riktigt än
-    diff = curr_dataset.targetsRR - OutputRR{set_nbr}
     
-
-    FN_tot(end+1) = sum(diff>0, 'all');
-    FP_tot(end+1) = sum(diff<0, 'all');
-
-    TN_tot(end+1) = sum(OutputRR{1} == 0) - FN_tot(set_nbr);
-    TP_tot(end+1) = sum(OutputRR{1} == 1) - FP_tot(set_nbr);
-
+    diff = TestVector{set_nbr}.targetsRR - OutputRR{set_nbr};
+    
+    FN_tot{set_nbr} = sum(diff>0, 'all');
+    FP_tot{set_nbr} = sum(diff<0, 'all');
+    TN_tot{set_nbr} = sum(OutputRR{set_nbr} == 0) - FN_tot{set_nbr};
+    TP_tot{set_nbr} = sum(OutputRR{set_nbr} == 1) - FP_tot{set_nbr};
+    
+    performance{set_nbr, 1} = TP_tot{set_nbr} ./ (TP_tot{set_nbr} + FN_tot{set_nbr}); % Sensitivity
+    performance{set_nbr, 2} = TN_tot{set_nbr} ./ (FP_tot{set_nbr} + TN_tot{set_nbr}); % Specificity
 end
 
-% fixa sensitivity och specificity i en vektor för performance meassures i
-% loopen ovan
-Sensitivity = TP / (TP + FN)
-Specificity = TN / (FP + TN)
+performance{end, 1} = sum(cell2mat(TP_tot)) / (sum(cell2mat(TP_tot)) + sum(cell2mat(FN_tot))); % Avg senseitivity
+performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2mat(TN_tot))); % Avg specificity
+
+% Sensitivity = TP / (TP + FN)
+% Specificity = TN / (FP + TN)
 
 
