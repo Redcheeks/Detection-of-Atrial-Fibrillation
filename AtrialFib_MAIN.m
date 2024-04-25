@@ -111,7 +111,7 @@ FN_tot = cell(length(TestVector),1);
 FP_tot = cell(length(TestVector),1);
 TN_tot = cell(length(TestVector),1);
 TP_tot = cell(length(TestVector),1);
-performance = cell([length(TestVector)+1, 2]); %sensitivity for first column and specificity for second col
+performance = cell([length(TestVector)+1, 2]); % Sensitivity for first col and specificity for second col
 
 for set_nbr = 1 : length(OutputRR) 
     
