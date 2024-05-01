@@ -62,7 +62,7 @@ for j = 1:length(TestVector)
 end
 
 
-%% Evaluate
+%% Evaluate - draw figures of results and threshold.
 
 figure(3);
 clf
@@ -105,7 +105,7 @@ legend('Pcv value', 'TargetRR', 'Threshold');
 xlabel('Time s');
 ylabel('P_{cv} value');
 
-%% Performance meassure
+%% Performance measure  - table output
 
 FN_tot = cell(length(TestVector),1);
 FP_tot = cell(length(TestVector),1);
@@ -126,10 +126,14 @@ for set_nbr = 1 : length(OutputRR)
     performance{set_nbr, 2} = TN_tot{set_nbr} ./ (FP_tot{set_nbr} + TN_tot{set_nbr}); % Specificity
 end
 
-performance{end, 1} = sum(cell2mat(TP_tot)) / (sum(cell2mat(TP_tot)) + sum(cell2mat(FN_tot))); % Avg senseitivity
+performance{end, 1} = sum(cell2mat(TP_tot)) / (sum(cell2mat(TP_tot)) + sum(cell2mat(FN_tot))); % Avg sensitivity
 performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2mat(TN_tot))); % Avg specificity
 
 % Sensitivity = TP / (TP + FN)
 % Specificity = TN / (FP + TN)
 
+Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
+Sensitivity = performance(:, 1);
+Specificity = performance(:, 2);
+pcv_results = table(Data_set, Sensitivity, Specificity);
 
