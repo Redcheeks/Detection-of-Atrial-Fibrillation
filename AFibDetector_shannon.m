@@ -1,4 +1,4 @@
-classdef AFibDetector_RMS
+classdef AFibDetector_shannon
     %AFIBDETECTOR Summary of this class goes here
     %   Detailed explanation goes here
     
