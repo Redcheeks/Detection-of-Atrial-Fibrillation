@@ -1,4 +1,4 @@
-classdef AFibDetector_PCV
+classdef AFibDetector_RMS
     %AFIBDETECTOR Summary of this class goes here
     %   Detailed explanation goes here
     
