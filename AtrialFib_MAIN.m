@@ -25,15 +25,18 @@ TestVector{7} = AFDB7;
 
 figure(1)
 clf
-plot(AFDB3.rr, 'b')
+plot(AFDB3.rr(find(AFDB3.targetsRR == 1)), 'r')
+plot(AFDB3.rr(find(AFDB3.targetsRR == 0)), 'b')
 hold on;
 
-for iter = 1:size((AFDB3.targetsRR),2)
-    if(AFDB3.targetsRR(iter) == 1)
-        plot(iter,0, 'r*')
-    end
-        
-end
+% for iter = 1:size((AFDB3.targetsRR),2)
+%     if(AFDB3.targetsRR(iter) == 1)
+%         plot(iter,AFDB3.rr(iter), 'r*')
+%     else
+%         plot(iter,AFDB3.rr(iter), 'b')
+%     end
+%         
+% end
 
 %% Run PCV detector
 
