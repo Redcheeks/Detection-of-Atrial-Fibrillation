@@ -140,3 +140,16 @@ Sensitivity = performance(:, 1);
 Specificity = performance(:, 2);
 pcv_results = table(Data_set, Sensitivity, Specificity);
 
+%% Run Shannon detector
+
+% Create Detector with training data;
+window = 30; %in seconds
+[AFDetector_SampEn, SampEnVector] = AFibDetector_shannon(TrainingVector, window);
+
+
+
+
+FeatureSelection(AFDetector_SampEn, threshold);
+
+
+
