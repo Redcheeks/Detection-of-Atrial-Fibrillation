@@ -17,12 +17,15 @@ classdef AFibDetector_shannon
             SampEn_true = [];
             SampEn_false = [];
             SampEnVector = cell(4);
+
+            
             
             for data_set = 1:length(DataVector) %for each training data
 %             figure
 %             hold on;
             %sliding window/ for each window position
-                for window_start = 0 : DataVector{data_set}.qrs(end)/1000 - (window) %end window before data ends
+            N = DataVector{data_set}.qrs(end)/1000 % current data set length in seconds
+                for window_start = 0 : N - (window) %end window before data ends
                 
                     % for each window, look at contents
                     % pick which datapoints (index) in the window
@@ -36,8 +39,29 @@ classdef AFibDetector_shannon
                     
                     SampEn = S/m;
                     SampEnVector{data_set}(end+1)= SampEn;
+
+
+                    % Hämtat från nätet
+                    r = 0.2*S
+                    data_matrix = NaN(window+1,N);
+                    for a = 1:window+1
+                        data_matrix(a,1:N+1-a) = DataVector{data_set}.rr(a:end);
+                    end
+                    data_matrix = data_matrix';
+                    % take pairwise distances across each window
+                    matrix_B = pdist(data_matrix(:,1:window), 'chebychev');
+                    matrix_A = pdist(data_matrix(:,1:window+1), 'chebychev');
+                    % take sum of counts of distances that fall within tolerance range
+                    B = sum(matrix_B <= r*std(data));
+                    A = sum(matrix_A <= r*std(data));
+                    % calculate ratio of natural logarithm, with normalization correction
+                    result = -log((A/B))*((N-window+1)/(N-window-1));
+                    % correct inf to a maximum value
+                    if isinf(result)
+                        result = -log(2 / ((N-window-1)*(N-window)));
+                    end
                     
-                    
+
                     if(center_tag)
                         SampEn_true(end + 1) = SampEn;
                     else
@@ -55,6 +79,7 @@ classdef AFibDetector_shannon
             legend('Fib', 'no fib');
             
         end
+
         %% Feature Selection / Threshold
         function feats = FeatureSelection(obj, thresh)
             % Feature Selection.
@@ -102,4 +127,3 @@ classdef AFibDetector_shannon
        end
 
 end
-
