@@ -72,11 +72,20 @@ clf
 for i = 1:length(TrainingVector)
     ax(i) = subplot(2,2,i);
     
-    plot(PcvVector{i}, 'b-')
-    hold on;
-    x = linspace(0, ceil(TrainingVector{i}.qrs(end)./1000), length(TrainingVector{i}.targetsQRS));
-    plot(x,TrainingVector{i}.targetsQRS*0.2, 'r-');
-    yline(threshold, 'k-.');
+    % Splitting data to AF and non AF
+    AF_red = PcvVector{i}; 
+    AF_red(AF_red<threshold) = threshold; % classified as non-AF
+    AF_blue = PcvVector{i};
+    AF_blue(AF_blue>threshold) = threshold; % classified as AF
+    plot(AF_blue, 'b-')
+    hold on
+    plot(AF_red,'r-')
+
+%     plot(PcvVector{i}, 'b-')
+%     hold on;
+%     x = linspace(0, ceil(TrainingVector{i}.qrs(end)./1000), length(TrainingVector{i}.targetsQRS));
+%     plot(x,TrainingVector{i}.targetsQRS*0.2, 'r-');
+    yline(threshold, 'k-.','LineWidth',1.5);
     ylim([0 0.5])
     xlabel('Time s');
     ylabel('P_{cv} value');
@@ -93,11 +102,21 @@ clf
 for i = 5:length(TestVector)   
     ax(i) = subplot(2,2,i-3);
     
-    plot(OutPcv{i}, 'b-')
-    hold on;
-    x = linspace(0, ceil(TestVector{i}.qrs(end)./1000), length(TestVector{i}.targetsQRS));
-    plot(x,TestVector{i}.targetsQRS*0.2, 'r-');
-    yline(threshold, 'k-.');
+    % Splitting data to AF and non AF
+    AF_red = OutPcv{i}; 
+    AF_red(AF_red<threshold) = threshold; % classified as non-AF
+    AF_blue = OutPcv{i};
+    AF_blue(AF_blue>threshold) = threshold; % classified as AF
+    plot(AF_blue, 'b-')
+    hold on
+    plot(AF_red,'r-')
+
+
+%     plot(OutPcv{i}, 'b-')
+%     hold on;
+%     x = linspace(0, ceil(TestVector{i}.qrs(end)./1000), length(TestVector{i}.targetsQRS));
+%     plot(x,TestVector{i}.targetsQRS*0.2, 'r-');
+    yline(threshold, 'k-.','LineWidth',1.5);
     ylim([0 0.5])
     xlabel('Time s');
     ylabel('P_{cv} value');
