@@ -104,7 +104,7 @@ Issampen_moment = 0;
 Issampen = 0;
 prior_b = 0;
 w_mean = 0;
-for i = 1:1:data_size-w_size-1 %kontrollera w_size-1 ifall rätt iom summa N-2
+for i = 1:data_size-w_size-1 %kontrollera w_size-1 ifall rätt iom summa N-2
     H = 0; % Heavyside step function
     for j =i:1:w_size
         %detection step of the sliding window
