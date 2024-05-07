@@ -65,7 +65,7 @@ for j = 1:length(TestVector)
 end
 
 
-%% Evaluate - draw figures of results and threshold.
+%% Evaluate Pcv - draw figures of results and threshold.
 
 figure(3);
 clf
@@ -159,16 +159,88 @@ Sensitivity = performance(:, 1);
 Specificity = performance(:, 2);
 pcv_results = table(Data_set, Sensitivity, Specificity);
 
-%% Run Shannon detector
+%% Run Shannon detector, fungerar ej
 
 % Create Detector with training data;
-window = 30; %in seconds
+window = 100; %in seconds
 [AFDetector_SampEn, SampEnVector] = AFibDetector_shannon(TrainingVector, window);
 
 
 
 
 FeatureSelection(AFDetector_SampEn, threshold);
+%% Run rMSSD detector
+
+% Create Detector with training data;
+window = 10; %in seconds
+[AFDetector_rMSSD, rmssdVector] = AFibDetector_rMSSD(TrainingVector, window);
+
+
+threshold = 0.11 % chosen manually from histogram plot
+
+FeatureSelection(AFDetector_rMSSD, threshold);
+% %% Test rMSSD detector with testing data;
+% 
+% 
+% OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
+% Outrmssd = cell(length(TestVector),1);
+% 
+% for j = 1:length(TestVector) 
+%     
+%   [OutputRR{j}, Outrmssd{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
+% end
+% 
+% %% Evaluate rMSSD - draw figures of results and threshold.
+% 
+% figure(3);
+% clf
+% for i = 1:length(TrainingVector)
+%     ax(i) = subplot(2,2,i);
+%     
+%     % Splitting data to AF and non AF
+%     AF_red = rmssdVector{i}; 
+%     AF_red(AF_red<threshold) = threshold; % classified as non-AF
+%     AF_blue = rmssdVector{i};
+%     AF_blue(AF_blue>threshold) = threshold; % classified as AF
+%     plot(AF_blue, 'b-')
+%     hold on
+%     plot(AF_red,'r-')
+% 
+%     yline(threshold, 'k-.','LineWidth',1.5);
+%     ylim([0 0.5])
+%     xlabel('Time s');
+%     ylabel('rMSSD value');
+%     title('Training Set ' + string(i))
+% end
+% linkaxes(ax,'xy')
+% legend('rMSSD value', 'TargetRR', 'Threshold');
+% xlabel('Time s');
+% ylabel('rMSSD value');
+% 
+% 
+% figure(4);
+% clf
+% for i = 5:length(TestVector)   
+%     ax(i) = subplot(2,2,i-3);
+%     
+%     % Splitting data to AF and non AF
+%     AF_red = Outrmssd{i}; 
+%     AF_red(AF_red<threshold) = threshold; % classified as non-AF
+%     AF_blue = Outrmssd{i};
+%     AF_blue(AF_blue>threshold) = threshold; % classified as AF
+%     plot(AF_blue, 'b-')
+%     hold on
+%     plot(AF_red,'r-')
+%     yline(threshold, 'k-.','LineWidth',1.5);
+%     ylim([0 0.5])
+%     xlabel('Time s');
+%     ylabel('rMSSD value');
+%     title('Testing Set ' + string(i))
+% end
+% linkaxes(ax,'xy')
+% legend('rMSSD value', 'TargetRR', 'Threshold');
+% xlabel('Time s');
+% ylabel('rMSSD value');
 
 
 
