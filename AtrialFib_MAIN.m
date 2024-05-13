@@ -25,9 +25,10 @@ TestVector{7} = AFDB7;
 
 figure(1)
 clf
-plot(AFDB3.rr(find(AFDB3.targetsRR == 1)), 'r')
-plot(AFDB3.rr(find(AFDB3.targetsRR == 0)), 'b')
+plot(AFDB3.rr(find(AFDB3.targetsRR == 1)), 'r', LineWidth=2)
 hold on;
+plot(AFDB3.rr(find(AFDB3.targetsRR == 0)), 'b')
+
 
 % for iter = 1:size((AFDB3.targetsRR),2)
 %     if(AFDB3.targetsRR(iter) == 1)
@@ -41,26 +42,23 @@ hold on;
 %% Run PCV detector
 
 % Create Detector with training data;
-window = 10; %in seconds
+window = 10; % in seconds
 [AFDetector_PCV, PcvVector] = AFibDetector_PCV(TrainingVector, window);
 
 
 %manually evaluate histogram and choose threshold
-
 threshold = 0.2;
 
 FeatureSelection(AFDetector_PCV, threshold);
 
 
 
-%% Test detector with testing data;
-
+%% Test detector with testing data, Pcv;
 
 OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
 OutPcv = cell(length(TestVector),1);
 
-for j = 1:length(TestVector) 
-    
+for j = 1:length(TestVector)
   [OutputRR{j}, OutPcv{j}] = AFibTesting(AFDetector_PCV,TestVector{j});
 end
 
@@ -169,7 +167,18 @@ window = 100; %in seconds
 
 
 FeatureSelection(AFDetector_SampEn, threshold);
-%% Run rMSSD detector
+
+%% SVM feats extraction
+window = 10; %in seconds
+% featVector = cell(35960,7);
+featVector = {};
+label = [];
+[AFDetector_svm, featVector, label] = AFibDetector_SVM_feats(TrainingVector, window, featVector, label);
+writetable(featVector, 'mat_feats_table.csv') % used in separate code in python
+
+
+
+%% Run rMSSD detector, should work
 
 % Create Detector with training data;
 window = 10; %in seconds
