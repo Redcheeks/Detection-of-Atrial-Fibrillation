@@ -134,7 +134,7 @@ for i = 1:length(TrainingVector)
     title('Training Set ' + string(i))
 end
 linkaxes(ax,'xy')
-legend('Pcv value', 'TargetRR', 'Threshold');
+legend('Pcv value', 'DetectRR', 'Threshold');
 xlabel('Time s');
 ylabel('P_{cv} value');
 
@@ -165,7 +165,7 @@ for i = 5:length(TestVector)
     title('Testing Set ' + string(i-4))
 end
 linkaxes(ax,'xy')
-legend('Pcv value', 'TargetRR', 'Threshold');
+legend('Pcv value', 'DetectRR', 'Threshold');
 xlabel('Time s');
 ylabel('P_{cv} value');
 
@@ -239,68 +239,100 @@ threshold = 0.11; % chosen manually from histogram plot
 
 FeatureSelection(AFDetector_rMSSD, threshold);
 
- %% Test rMSSD detector with testing data;
+%% Test rMSSD detector with testing data;
 % 
-% 
-% OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
-% Outrmssd = cell(length(TestVector),1);
-% 
-% for j = 1:length(TestVector) 
-%     
-%   [OutputRR{j}, Outrmssd{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
-% end
-% 
-% %% Evaluate rMSSD - draw figures of results and threshold.
-% 
-% figure(3);
-% clf
-% for i = 1:length(TrainingVector)
-%     ax(i) = subplot(2,2,i);
-%     
-%     % Splitting data to AF and non AF
-%     AF_red = rmssdVector{i}; 
-%     AF_red(AF_red<threshold) = threshold; % classified as non-AF
-%     AF_blue = rmssdVector{i};
-%     AF_blue(AF_blue>threshold) = threshold; % classified as AF
-%     plot(AF_blue, 'b-')
-%     hold on
-%     plot(AF_red,'r-')
-% 
-%     yline(threshold, 'k-.','LineWidth',1.5);
-%     ylim([0 0.5])
-%     xlabel('Time s');
-%     ylabel('rMSSD value');
-%     title('Training Set ' + string(i))
-% end
-% linkaxes(ax,'xy')
-% legend('rMSSD value', 'TargetRR', 'Threshold');
-% xlabel('Time s');
-% ylabel('rMSSD value');
-% 
-% 
-% figure(4);
-% clf
-% for i = 5:length(TestVector)   
-%     ax(i) = subplot(2,2,i-3);
-%     
-%     % Splitting data to AF and non AF
-%     AF_red = Outrmssd{i}; 
-%     AF_red(AF_red<threshold) = threshold; % classified as non-AF
-%     AF_blue = Outrmssd{i};
-%     AF_blue(AF_blue>threshold) = threshold; % classified as AF
-%     plot(AF_blue, 'b-')
-%     hold on
-%     plot(AF_red,'r-')
-%     yline(threshold, 'k-.','LineWidth',1.5);
-%     ylim([0 0.5])
-%     xlabel('Time s');
-%     ylabel('rMSSD value');
-%     title('Testing Set ' + string(i))
-% end
-% linkaxes(ax,'xy')
-% legend('rMSSD value', 'TargetRR', 'Threshold');
-% xlabel('Time s');
-% ylabel('rMSSD value');
 
+ OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
+ Outrmssd = cell(length(TestVector),1);
+
+for j = 1:length(TestVector) 
+    
+  [OutputRR{j}, Outrmssd{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
+end
+
+%% Evaluate rMSSD - draw figures of results and threshold.
+
+figure(3);
+clf
+for i = 1:length(TrainingVector)
+    ax(i) = subplot(2,2,i);
+    
+    % Splitting data to AF and non AF
+    AF_red = rmssdVector{i}; 
+    AF_red(AF_red<threshold) = threshold; % classified as non-AF
+    AF_blue = rmssdVector{i};
+    AF_blue(AF_blue>threshold) = threshold; % classified as AF
+    plot(AF_blue, 'b-')
+    hold on
+    plot(AF_red,'r-')
+
+    yline(threshold, 'k-.','LineWidth',1.5);
+    ylim([0 0.5])
+    xlabel('Time s');
+    ylabel('rMSSD value');
+    title('Training Set ' + string(i))
+end
+linkaxes(ax,'xy')
+legend('rMSSD value', 'DetectRR', 'Threshold');
+xlabel('Time s');
+ylabel('rMSSD value');
+
+
+figure(4);
+clf
+for i = 5:length(TestVector)   
+    ax(i) = subplot(2,2,i-4);
+    
+    % Splitting data to AF and non AF
+    AF_red = Outrmssd{i}; 
+    AF_red(AF_red<threshold) = threshold; % classified as non-AF
+    AF_blue = Outrmssd{i};
+    AF_blue(AF_blue>threshold) = threshold; % classified as AF
+    plot(AF_blue, 'b-')
+    hold on
+    plot(AF_red,'r-')
+    yline(threshold, 'k-.','LineWidth',1.5);
+    ylim([0 0.5])
+    xlabel('Time s');
+    ylabel('rMSSD value');
+    title('Testing Set ' + string(i-4))
+end
+linkaxes(ax,'xy')
+legend('rMSSD value', 'DetectRR', 'Threshold');
+xlabel('Time s');
+ylabel('rMSSD value');
+
+
+%% Performance measure rMSSD - table output
+
+FN_tot = cell(length(TestVector),1);
+FP_tot = cell(length(TestVector),1);
+TN_tot = cell(length(TestVector),1);
+TP_tot = cell(length(TestVector),1);
+performance = cell([length(TestVector)+1, 2]); % Sensitivity for first col and specificity for second col
+
+for set_nbr = 1 : length(OutputRR) 
+    
+    diff = TestVector{set_nbr}.targetsRR - OutputRR{set_nbr};
+    
+    FN_tot{set_nbr} = sum(diff>0, 'all');
+    FP_tot{set_nbr} = sum(diff<0, 'all');
+    TN_tot{set_nbr} = sum(OutputRR{set_nbr} == 0) - FN_tot{set_nbr};
+    TP_tot{set_nbr} = sum(OutputRR{set_nbr} == 1) - FP_tot{set_nbr};
+    
+    performance{set_nbr, 1} = TP_tot{set_nbr} ./ (TP_tot{set_nbr} + FN_tot{set_nbr}); % Sensitivity
+    performance{set_nbr, 2} = TN_tot{set_nbr} ./ (FP_tot{set_nbr} + TN_tot{set_nbr}); % Specificity
+end
+
+performance{end, 1} = sum(cell2mat(TP_tot)) / (sum(cell2mat(TP_tot)) + sum(cell2mat(FN_tot))); % Avg sensitivity
+performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2mat(TN_tot))); % Avg specificity
+
+% Sensitivity = TP / (TP + FN)
+% Specificity = TN / (FP + TN)
+
+Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
+Sensitivity = performance(:, 1);
+Specificity = performance(:, 2);
+rmssd_results = table(Data_set, Sensitivity, Specificity);
 
 
