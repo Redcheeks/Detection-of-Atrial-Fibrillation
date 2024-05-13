@@ -48,7 +48,7 @@ end
 
 title ('Patient ' + string(data))
 ylabel('RR interval');
-xlabel('Time [s]');
+xlabel('Beats');
 legend('Non-AF','AF');
 
 end
@@ -79,7 +79,7 @@ end
 
 title ('Patient ' + string(data))
 ylabel('RR interval');
-xlabel('Time [s]');
+xlabel('Beats');
 legend('Non-AF','AF');
 
 end
