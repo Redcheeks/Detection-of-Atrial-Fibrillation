@@ -218,7 +218,7 @@ window = 10; %in seconds
 svm_featVector = {};
 svm_label = [];
 [AFDetector_svm, svm_featVector, svm_label] = AFibDetector_SVM_feats(TrainingVector, window, svm_featVector, svm_label);
-writetable(svm_featVector, 'mat_feats_table.csv') % used in separate code in python
+writetable(svm_featVector, 'mat_feats_table.csv', 'WriteVariableNames', false) % used in separate code in python
 writematrix(transpose(svm_label), 'mat_labels.csv')
 
 svm_featVector2 = {};
@@ -226,7 +226,7 @@ svm_label2 = [];
 actualtest = {AFDB5, AFDB6, AFDB7};
 
 [AFDetector_svm, svm_featVector2, svm_label2] = AFibDetector_SVM_feats(actualtest, window, svm_featVector2, svm_label2);
-writetable(svm_featVector2, 'mat_test_feats_table.csv') % used in separate code in python
+writetable(svm_featVector2, 'mat_test_feats_table.csv', 'WriteVariableNames', false) % used in separate code in python
 writematrix(transpose(svm_label2), 'mat_test_labels.csv')
 %% Run rMSSD detector, should work
 
