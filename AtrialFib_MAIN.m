@@ -22,23 +22,60 @@ AFDB7 = load('AF_RR_intervals/afdb_7.mat');
 TestVector{7} = AFDB7;
 
 %% Visualize data
-
 figure(1)
 clf
-plot(AFDB3.rr(find(AFDB3.targetsRR == 1)), 'r', LineWidth=2)
+for iter = 1:2
+    subplot(2,1,iter);
+    plot(0,0,'w');
+    hold on;
+    
+    for j = 1:length(TrainingVector{iter}.rr)        
+        if TrainingVector{iter}.targetsRR == 0
+            plot(j,TrainingVector{iter}.rr(j), 'b') 
+        else
+            plot(j,TrainingVector{iter}.rr(j), 'r')
+        end 
+    end
+    title ('Patient ' + string(iter))
+    ylabel('RR interval');
+    xlabel('Time [s]');
+    legend('Non-AF','AF');
+end
+
+%%
+figure(2)
+subplot(2,1,1)
+
+plot(0,0,'w*');
 hold on;
-plot(AFDB3.rr(find(AFDB3.targetsRR == 0)), 'b')
+for iter = 1:size((AFDB3.targetsRR),2)
+    if(AFDB3.targetsRR(iter) == 1)
+        plot(iter,AFDB3.rr(iter), 'r')
+    else
+        plot(iter,AFDB3.rr(iter), 'b')
+    end  
+end
+title ('Patient 3')
+ylabel('RR interval');
+xlabel('Time [s]');
+legend('Non-AF','AF');
 
 
-% for iter = 1:size((AFDB3.targetsRR),2)
-%     if(AFDB3.targetsRR(iter) == 1)
-%         plot(iter,AFDB3.rr(iter), 'r*')
-%     else
-%         plot(iter,AFDB3.rr(iter), 'b')
-%     end
-%         
-% end
+subplot(2,1,2)
 
+plot(0,0,'w*');
+hold on;
+for iter = 1:size((AFDB4.targetsRR),2)
+    if(AFDB4.targetsRR(iter) == 1)
+        plot(iter,AFDB4.rr(iter), 'r')
+    else
+        plot(iter,AFDB4.rr(iter), 'b')
+    end  
+end
+title ('Patient 4')
+ylabel('RR interval');
+xlabel('Time [s]');
+legend('Non-AF','AF');
 %% Run PCV detector
 
 % Create Detector with training data;
