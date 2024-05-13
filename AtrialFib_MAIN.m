@@ -242,12 +242,12 @@ FeatureSelection(AFDetector_rMSSD, threshold);
 %% Test rMSSD detector with testing data;
 % 
 
- OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
+ OutputRR2 = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
  Outrmssd = cell(length(TestVector),1);
 
 for j = 1:length(TestVector) 
     
-  [OutputRR{j}, Outrmssd{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
+  [OutputRR2{j}, Outrmssd{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
 end
 
 %% Evaluate rMSSD - draw figures of results and threshold.
@@ -311,14 +311,14 @@ TN_tot = cell(length(TestVector),1);
 TP_tot = cell(length(TestVector),1);
 performance = cell([length(TestVector)+1, 2]); % Sensitivity for first col and specificity for second col
 
-for set_nbr = 1 : length(OutputRR) 
+for set_nbr = 1 : length(OutputRR2) 
     
-    diff = TestVector{set_nbr}.targetsRR - OutputRR{set_nbr};
+    diff = TestVector{set_nbr}.targetsRR - OutputRR2{set_nbr};
     
     FN_tot{set_nbr} = sum(diff>0, 'all');
     FP_tot{set_nbr} = sum(diff<0, 'all');
-    TN_tot{set_nbr} = sum(OutputRR{set_nbr} == 0) - FN_tot{set_nbr};
-    TP_tot{set_nbr} = sum(OutputRR{set_nbr} == 1) - FP_tot{set_nbr};
+    TN_tot{set_nbr} = sum(OutputRR2{set_nbr} == 0) - FN_tot{set_nbr};
+    TP_tot{set_nbr} = sum(OutputRR2{set_nbr} == 1) - FP_tot{set_nbr};
     
     performance{set_nbr, 1} = TP_tot{set_nbr} ./ (TP_tot{set_nbr} + FN_tot{set_nbr}); % Sensitivity
     performance{set_nbr, 2} = TN_tot{set_nbr} ./ (FP_tot{set_nbr} + TN_tot{set_nbr}); % Specificity

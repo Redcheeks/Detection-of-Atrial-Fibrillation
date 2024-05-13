@@ -35,9 +35,7 @@ classdef AFibDetector_rMSSD
                     rmssd = sqrt(mean(delta_rrsqrd));
                     
                     rmssdVector{data_set}(end+1)= rmssd;
-                    
-                    %plot(int64(mean(indexes)), Pcv, '*')
-                    
+                                        
                     if(center_tag)
                         rmssd_true(end + 1) = rmssd;
                     else
