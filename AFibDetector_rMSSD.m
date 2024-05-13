@@ -52,8 +52,10 @@ classdef AFibDetector_rMSSD
             histogram(rmssd_true);
             hold on
             histogram(rmssd_false);
-            legend('Fib', 'no fib');
-            
+            legend('AF', 'no AF');
+            title('rMSSD value for different data')
+            ylabel('Frequency');
+            xlabel('rMSSD');
         end
         %% Feature Selection / Threshold
         function feats = FeatureSelection(obj, thresh)

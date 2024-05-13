@@ -48,7 +48,7 @@ end
 
 title ('Patient ' + string(data))
 ylabel('RR interval');
-xlabel('Beats');
+xlabel('Time');
 legend('Non-AF','AF');
 
 end
@@ -79,7 +79,7 @@ end
 
 title ('Patient ' + string(data))
 ylabel('RR interval');
-xlabel('Beats');
+xlabel('Time');
 legend('Non-AF','AF');
 
 end
@@ -142,7 +142,7 @@ ylabel('P_{cv} value');
 figure(4);
 clf
 for i = 5:length(TestVector)   
-    ax(i) = subplot(2,2,i-3);
+    ax(i) = subplot(2,2,i-4);
     
     % Splitting data to AF and non AF
     AF_red = OutPcv{i}; 
@@ -162,7 +162,7 @@ for i = 5:length(TestVector)
     ylim([0 0.5])
     xlabel('Time s');
     ylabel('P_{cv} value');
-    title('Testing Set ' + string(i))
+    title('Testing Set ' + string(i-4))
 end
 linkaxes(ax,'xy')
 legend('Pcv value', 'TargetRR', 'Threshold');
@@ -235,10 +235,11 @@ window = 10; %in seconds
 [AFDetector_rMSSD, rmssdVector] = AFibDetector_rMSSD(TrainingVector, window);
 
 
-threshold = 0.11 % chosen manually from histogram plot
+threshold = 0.11; % chosen manually from histogram plot
 
 FeatureSelection(AFDetector_rMSSD, threshold);
-% %% Test rMSSD detector with testing data;
+
+ %% Test rMSSD detector with testing data;
 % 
 % 
 % OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
