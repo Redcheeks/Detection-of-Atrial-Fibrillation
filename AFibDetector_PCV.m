@@ -53,8 +53,11 @@ classdef AFibDetector_PCV
             histogram(pcv_true);
             hold on
             histogram(pcv_false);
-            legend('Fib', 'no fib');
-            
+            legend('AF', 'no AF');
+            title('Pcv value for different data')
+            ylabel('Frequency');
+            xlabel('P_{CV}');
+
         end
         %% Feature Selection / Threshold
         function feats = FeatureSelection(obj, thresh)
