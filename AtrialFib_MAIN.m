@@ -24,58 +24,65 @@ TestVector{7} = AFDB7;
 %% Visualize data
 figure(1)
 clf
-for iter = 1:2
-    subplot(2,1,iter);
-    plot(0,0,'w');
-    hold on;
+for data = 1:2
     
-    for j = 1:length(TrainingVector{iter}.rr)        
-        if TrainingVector{iter}.targetsRR == 0
-            plot(j,TrainingVector{iter}.rr(j), 'b') 
-        else
-            plot(j,TrainingVector{iter}.rr(j), 'r')
-        end 
-    end
-    title ('Patient ' + string(iter))
-    ylabel('RR interval');
-    xlabel('Time [s]');
-    legend('Non-AF','AF');
+index_change = [1];
+temp = TrainingVector{data}.targetsRR(1);
+colortmp = ['b', 'r']; % I think we always start with Non-AF?
+for iter = 1:length(TrainingVector{data}.rr)
+    if(TrainingVector{data}.targetsRR(iter) == temp)
+    else
+        temp = TrainingVector{data}.targetsRR(iter); %current state
+        index_change(end+1) =  iter; %Save index where target changes
+        colortmp(end+1) = colortmp(end-1); %add change in color.
+    end  
+end
+index_change(end+1) = length(TrainingVector{data}.rr); % End index
+
+subplot(2,1,data)
+hold on;
+for j = 1:(length(index_change)-1)
+    plot(index_change(j):index_change(j+1),TrainingVector{data}.rr(index_change(j):index_change(j+1)), colortmp(j))
 end
 
+
+title ('Patient ' + string(data))
+ylabel('RR interval');
+xlabel('Time [s]');
+legend('Non-AF','AF');
+
+end
 %%
 figure(2)
-subplot(2,1,1)
-
-plot(0,0,'w*');
-hold on;
-for iter = 1:size((AFDB3.targetsRR),2)
-    if(AFDB3.targetsRR(iter) == 1)
-        plot(iter,AFDB3.rr(iter), 'r')
+clf
+for data = 3:4
+    
+index_change = [1];
+temp = TrainingVector{data}.targetsRR(1);
+colortmp = ['b', 'r']; % I think we always start with Non-AF?
+for iter = 1:length(TrainingVector{data}.rr)
+    if(TrainingVector{data}.targetsRR(iter) == temp)
     else
-        plot(iter,AFDB3.rr(iter), 'b')
+        temp = TrainingVector{data}.targetsRR(iter); %current state
+        index_change(end+1) =  iter; %Save index where target changes
+        colortmp(end+1) = colortmp(end-1); %add change in color.
     end  
 end
-title ('Patient 3')
+index_change(end+1) = length(TrainingVector{data}.rr); % End index
+
+subplot(2,1,data-2)
+hold on;
+for j = 1:(length(index_change)-1)
+    plot(index_change(j):index_change(j+1),TrainingVector{data}.rr(index_change(j):index_change(j+1)), colortmp(j))
+end
+
+
+title ('Patient ' + string(data))
 ylabel('RR interval');
 xlabel('Time [s]');
 legend('Non-AF','AF');
 
-
-subplot(2,1,2)
-
-plot(0,0,'w*');
-hold on;
-for iter = 1:size((AFDB4.targetsRR),2)
-    if(AFDB4.targetsRR(iter) == 1)
-        plot(iter,AFDB4.rr(iter), 'r')
-    else
-        plot(iter,AFDB4.rr(iter), 'b')
-    end  
 end
-title ('Patient 4')
-ylabel('RR interval');
-xlabel('Time [s]');
-legend('Non-AF','AF');
 %% Run PCV detector
 
 % Create Detector with training data;
