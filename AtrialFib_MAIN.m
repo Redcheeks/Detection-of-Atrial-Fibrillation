@@ -181,10 +181,10 @@ for set_nbr = 1 : length(OutputRR)
     
     diff = TestVector{set_nbr}.targetsRR - OutputRR{set_nbr};
     
-    FN_tot{set_nbr} = sum(diff>0, 'all');
-    FP_tot{set_nbr} = sum(diff<0, 'all');
-    TN_tot{set_nbr} = sum(OutputRR{set_nbr} == 0) - FN_tot{set_nbr};
-    TP_tot{set_nbr} = sum(OutputRR{set_nbr} == 1) - FP_tot{set_nbr};
+    FN_tot{set_nbr} = sum(diff>0, 'all'); %False negative
+    FP_tot{set_nbr} = sum(diff<0, 'all'); %False positive
+    TN_tot{set_nbr} = sum(OutputRR{set_nbr} == 0) - FN_tot{set_nbr}; %True negative: Total negative - false negatives
+    TP_tot{set_nbr} = sum(OutputRR{set_nbr} == 1) - FP_tot{set_nbr}; %True Positive
     
     performance{set_nbr, 1} = TP_tot{set_nbr} ./ (TP_tot{set_nbr} + FN_tot{set_nbr}); % Sensitivity
     performance{set_nbr, 2} = TN_tot{set_nbr} ./ (FP_tot{set_nbr} + TN_tot{set_nbr}); % Specificity
@@ -196,7 +196,7 @@ performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2
 % Sensitivity = TP / (TP + FN)
 % Specificity = TN / (FP + TN)
 % Accuracy = (TP + FN) / (TP + TN + FP + FN)
-Accuracy = (TP_tot + FN_tot) / (TP_tot + TN_tot + FP_tot + FN_tot)
+Accuracy = (sum([TP_tot{5:7}]) + (sum([FN_tot{5:7}]))) / (sum([TP_tot{5:7}]) + sum([TN_tot{5:7}]) + sum([FP_tot{5:7}]) + sum([FN_tot{5:7}])) 
 
 Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
 Sensitivity = performance(:, 1);

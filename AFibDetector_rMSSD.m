@@ -62,6 +62,7 @@ classdef AFibDetector_rMSSD
             
             
             obj.threshold = thresh;
+            feats = obj;
         end
         
         
