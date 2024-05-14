@@ -1,5 +1,5 @@
 %% Import Training Data
-%clear all;
+clear all;
 
 AFDB1 = load('AF_RR_intervals/afdb_1.mat');
 TrainingVector{1} = AFDB1;
@@ -100,10 +100,11 @@ AFDetector_rMSSD = FeatureSelection(AFDetector_rMSSD, threshold); %set threshold
 
  OutputRR2 = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
  Outrmssd = cell(length(TestVector),1);
+ truermssdVector = cell(length(TestVector),1);
 
 for j = 1:length(TestVector) 
     
-  [OutputRR2{j}, Outrmssd{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
+  [OutputRR2{j}, Outrmssd{j}, truermssdVector{j}] = AFibTesting(AFDetector_rMSSD,TestVector{j});
 end
 
 %% Evaluate rMSSD - draw figures of results and threshold.
@@ -122,17 +123,17 @@ for i = 1:length(TrainingVector)
     hold on
     plot(AF_red,'r-')
     
-    plot(find(TrainingVector{i}.targetsRR == 1), 0.5, 'k.')
-
     yline(threshold, 'k-.','LineWidth',1.5);
+    plot(find(truermssdVector{i} == 1), 0.4, 'k.')
+ 
     ylim([0 0.5])
-    xlabel('Time s');
+    xlabel('Time');
     ylabel('RMSSD value');
     title('Training Set ' + string(i))
 end
 linkaxes(ax,'xy')
-legend('RMSSD value', 'DetectRR', 'Threshold');
-xlabel('Time s');
+legend('RMSSD value', 'Detected AF', 'Threshold', 'True AF');
+xlabel('Time');
 ylabel('RMSSD value');
 
 
@@ -150,17 +151,18 @@ for i = 5:length(TestVector)
     hold on
     plot(AF_red,'r-')
     
-    plot(find(TrainingVector{i}.targetsRR == 1), 0.5, 'k.')
-    
     yline(threshold, 'k-.','LineWidth',1.5);
+    
+    plot(find(truermssdVector{i} == 1), 0.4, 'k.')
+    
     ylim([0 0.5])
-    xlabel('Time s');
+    xlabel('Time ');
     ylabel('RMSSD value');
     title('Testing Set ' + string(i-4))
 end
 linkaxes(ax,'xy')
-legend('RMSSD value', 'DetectRR', 'Threshold');
-xlabel('Time s');
+legend('RMSSD value', 'Detected AF', 'Threshold', 'True AF');
+xlabel('Time');
 ylabel('RMSSD value');
 
 

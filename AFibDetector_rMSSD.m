@@ -51,9 +51,9 @@ classdef AFibDetector_rMSSD
             hold on
             histogram(rmssd_false);
             legend('AF', 'no AF');
-            title('rMSSD value for different data')
+            title('RMSSD value for different data')
             ylabel('Frequency');
-            xlabel('rMSSD');
+            xlabel('RMSSD');
         end
         %% Feature Selection / Threshold
         function feats = FeatureSelection(obj, thresh)
@@ -67,14 +67,16 @@ classdef AFibDetector_rMSSD
         
         
         %% Detector Testing - returns detectedRR
-        function [detectRRVector, rmssdVector] = AFibTesting(obj,Data)
+        function [detectRRVector, rmssdVector, truermssdVector] = AFibTesting(obj,Data)
             %AFIBTESTING Tests the detector using input DataVector
             %input wants one testdata cell-array
             
             % -------- RUN DETECTOR --------
             
             detectRRVector = zeros(size(Data.targetsRR));
+            truermssdVector = [];
             rmssdVector = [];
+             
             
             %sliding window/ for each window position
                 for window_start = 0 : Data.qrs(end)/1000 - (obj.window) %end window before data ends
@@ -89,7 +91,7 @@ classdef AFibDetector_rMSSD
                     rmssd = sqrt(mean(delta_rrsqrd));
 
                     rmssdVector(end+1)= rmssd;
-                    
+                    truermssdVector(end+1) = Data.targetsRR(int64(mean(indexes)));
                     
                     if(rmssd > obj.threshold)
                         detectRRVector(int64(mean(indexes))) = 1;

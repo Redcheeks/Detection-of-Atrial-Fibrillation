@@ -101,9 +101,10 @@ AFDetector_PCV = FeatureSelection(AFDetector_PCV, threshold);
 
 OutputRR = cell(length(TestVector),1); %contains [detectRRVector, pcvVector] for each data_set
 OutPcv = cell(length(TestVector),1);
+trueAF = cell(length(TestVector),1);
 
 for j = 1:length(TestVector)
-  [OutputRR{j}, OutPcv{j}] = AFibTesting(AFDetector_PCV,TestVector{j});
+  [OutputRR{j}, OutPcv{j}, trueAF{j}] = AFibTesting(AFDetector_PCV,TestVector{j});
 end
 
 
@@ -128,13 +129,15 @@ for i = 1:length(TrainingVector)
 %     x = linspace(0, ceil(TrainingVector{i}.qrs(end)./1000), length(TrainingVector{i}.targetsQRS));
 %     plot(x,TrainingVector{i}.targetsQRS*0.2, 'r-');
     yline(threshold, 'k-.','LineWidth',1.5);
+    plot(find(trueAF{i} == 1), 0.4, 'k.')
+    
     ylim([0 0.5])
     xlabel('Time s');
     ylabel('P_{cv} value');
     title('Training Set ' + string(i))
 end
 linkaxes(ax,'xy')
-legend('Pcv value', 'DetectRR', 'Threshold');
+legend('Pcv value', 'DetectRR', 'Threshold', 'True AF');
 xlabel('Time s');
 ylabel('P_{cv} value');
 
@@ -159,13 +162,15 @@ for i = 5:length(TestVector)
 %     x = linspace(0, ceil(TestVector{i}.qrs(end)./1000), length(TestVector{i}.targetsQRS));
 %     plot(x,TestVector{i}.targetsQRS*0.2, 'r-');
     yline(threshold, 'k-.','LineWidth',1.5);
+    plot(find(trueAF{i} == 1), 0.4, 'k.')
+    
     ylim([0 0.5])
     xlabel('Time s');
     ylabel('P_{cv} value');
     title('Testing Set ' + string(i-4))
 end
 linkaxes(ax,'xy')
-legend('Pcv value', 'DetectRR', 'Threshold');
+legend('Pcv value', 'DetectRR', 'Threshold', 'True AF');
 xlabel('Time s');
 ylabel('P_{cv} value');
 

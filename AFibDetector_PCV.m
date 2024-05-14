@@ -71,7 +71,7 @@ classdef AFibDetector_PCV
         
         
         %% Detector Testing - returns detectedRR
-        function [detectRRVector, pcvVector] = AFibTesting(obj,Data)
+        function [detectRRVector, pcvVector, trueAF] = AFibTesting(obj,Data)
             %AFIBTESTING Tests the detector using input DataVector
             %input wants one testdata cell-array
             
@@ -79,6 +79,7 @@ classdef AFibDetector_PCV
             
             detectRRVector = zeros(size(Data.targetsRR));
             pcvVector = [];
+            trueAF = [];
             
             %sliding window/ for each window position
                 for window_start = 0 : Data.qrs(end)/1000 - (obj.window) %end window before data ends
@@ -94,6 +95,7 @@ classdef AFibDetector_PCV
                     
                     Pcv = S/m;
                     pcvVector(end+1)= Pcv;
+                    trueAF(end +1) = Data.targetsRR(int64(mean(indexes)));
                     
                     
                     if(Pcv > obj.threshold)
