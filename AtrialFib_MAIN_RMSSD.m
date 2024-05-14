@@ -150,13 +150,13 @@ for i = 5:length(TestVector)
     yline(threshold, 'k-.','LineWidth',1.5);
     ylim([0 0.5])
     xlabel('Time s');
-    ylabel('rMSSD value');
+    ylabel('RMSSD value');
     title('Testing Set ' + string(i-4))
 end
 linkaxes(ax,'xy')
-legend('rMSSD value', 'DetectRR', 'Threshold');
+legend('RMSSD value', 'DetectRR', 'Threshold');
 xlabel('Time s');
-ylabel('rMSSD value');
+ylabel('RMSSD value');
 
 
 %% Performance measure rMSSD - table output
