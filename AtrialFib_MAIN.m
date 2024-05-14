@@ -195,6 +195,8 @@ performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2
 
 % Sensitivity = TP / (TP + FN)
 % Specificity = TN / (FP + TN)
+% Accuracy = (TP + FN) / (TP + TN + FP + FN)
+Accuracy = (TP_tot + FN_tot) / (TP_tot + TN_tot + FP_tot + FN_tot)
 
 Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
 Sensitivity = performance(:, 1);
@@ -273,9 +275,9 @@ for i = 1:length(TrainingVector)
     title('Training Set ' + string(i))
 end
 linkaxes(ax,'xy')
-legend('rMSSD value', 'DetectRR', 'Threshold');
+legend('RMSSD value', 'DetectRR', 'Threshold');
 xlabel('Time s');
-ylabel('rMSSD value');
+ylabel('RMSSD value');
 
 
 figure(4);
@@ -329,6 +331,8 @@ performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2
 
 % Sensitivity = TP / (TP + FN)
 % Specificity = TN / (FP + TN)
+% Accuracy = (TP + FN) / (TP + TN + FP + FN)
+Accuracy = (TP_tot + FN_tot) / (TP_tot + TN_tot + FP_tot + FN_tot)
 
 Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
 Sensitivity = performance(:, 1);
