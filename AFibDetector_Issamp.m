@@ -77,6 +77,7 @@ classdef AFibDetector_Issamp
             
             
             obj.threshold = thresh;
+            feats = obj;
         end
         
         

@@ -93,7 +93,7 @@ window = 10; % in seconds
 %manually evaluate histogram and choose threshold
 threshold = 0.2;
 
-FeatureSelection(AFDetector_PCV, threshold);
+AFDetector_PCV = FeatureSelection(AFDetector_PCV, threshold);
 
 
 
@@ -206,28 +206,28 @@ pcv_results = table(Data_set, Sensitivity, Specificity);
 %% Run Shannon detector, fungerar ej
 
 % Create Detector with training data;
-window = 100; %in beats
-[AFDetector_SampEn, SampEnVector] = AFibDetector_shannon(TrainingVector, window);
-
-
-
-
-FeatureSelection(AFDetector_SampEn, threshold);
+% window = 100; %in beats
+% [AFDetector_SampEn, SampEnVector] = AFibDetector_shannon(TrainingVector, window);
+% 
+% 
+% 
+% 
+% AFDetector_SampEn = FeatureSelection(AFDetector_SampEn, threshold);
 
 %% SVM feats extraction
-window = 10; %in seconds
-% featVector = cell(35960,7);
-svm_featVector = {};
-svm_label = [];
-[AFDetector_svm, svm_featVector, svm_label] = AFibDetector_SVM_feats(TrainingVector, window, svm_featVector, svm_label);
-writetable(svm_featVector, 'mat_feats_table.csv', 'WriteVariableNames', false) % used in separate code in python
-writematrix(transpose(svm_label), 'mat_labels.csv')
-
-svm_featVector2 = {};
-svm_label2 = [];
-actualtest = {AFDB5, AFDB6, AFDB7};
-
-[AFDetector_svm, svm_featVector2, svm_label2] = AFibDetector_SVM_feats(actualtest, window, svm_featVector2, svm_label2);
-writetable(svm_featVector2, 'mat_test_feats_table.csv', 'WriteVariableNames', false) % used in separate code in python
-writematrix(transpose(svm_label2), 'mat_test_labels.csv')
-
+% window = 10; %in seconds
+% % featVector = cell(35960,7);
+% svm_featVector = {};
+% svm_label = [];
+% [AFDetector_svm, svm_featVector, svm_label] = AFibDetector_SVM_feats(TrainingVector, window, svm_featVector, svm_label);
+% writetable(svm_featVector, 'mat_feats_table.csv', 'WriteVariableNames', false) % used in separate code in python
+% writematrix(transpose(svm_label), 'mat_labels.csv')
+% 
+% svm_featVector2 = {};
+% svm_label2 = [];
+% actualtest = {AFDB5, AFDB6, AFDB7};
+% 
+% [AFDetector_svm, svm_featVector2, svm_label2] = AFibDetector_SVM_feats(actualtest, window, svm_featVector2, svm_label2);
+% writetable(svm_featVector2, 'mat_test_feats_table.csv', 'WriteVariableNames', false) % used in separate code in python
+% writematrix(transpose(svm_label2), 'mat_test_labels.csv')
+% 

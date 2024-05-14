@@ -1,5 +1,5 @@
 %% Import Training Data
-clear all;
+%clear all;
 
 AFDB1 = load('AF_RR_intervals/afdb_1.mat');
 TrainingVector{1} = AFDB1;
@@ -93,7 +93,7 @@ window = 10; %in seconds
 
 threshold = 0.11; % chosen manually from histogram plot
 
-FeatureSelection(AFDetector_rMSSD, threshold);
+AFDetector_rMSSD = FeatureSelection(AFDetector_rMSSD, threshold); %set threshold!
 
 %% Test rMSSD detector with testing data;
 % 
@@ -190,8 +190,8 @@ Accuracy = (sum([TP_tot{5:7}]) + (sum([FN_tot{5:7}]))) / (sum([TP_tot{5:7}]) + s
 
 
 Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
-Sensitivity = performance(:, 1);
-Specificity = performance(:, 2);
-rmssd_results = table(Data_set, Sensitivity, Specificity);
+Sensitivity2 = performance(:, 1);
+Specificity2 = performance(:, 2);
+rmssd_results = table(Data_set, Sensitivity2, Specificity2)
 
 

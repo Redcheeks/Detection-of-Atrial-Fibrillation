@@ -9,7 +9,7 @@ classdef AFibDetector_rMSSD
     
     methods
         function [obj, rmssdVector] = AFibDetector_rMSSD(DataVector, window)
-            %AFIBDETECTOR Creates and Trains a AFibDetector.
+            %AFIBDETECTOR Creates an AFibDetector and produces a histogram based on results.
             %   
             obj.window = window;
             obj.threshold = 0;

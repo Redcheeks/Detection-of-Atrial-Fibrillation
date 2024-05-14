@@ -66,6 +66,7 @@ classdef AFibDetector_PCV
             
             
             obj.threshold = thresh;
+            feats = obj;
         end
         
         
