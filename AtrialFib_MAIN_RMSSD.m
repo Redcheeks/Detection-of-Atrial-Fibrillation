@@ -121,6 +121,8 @@ for i = 1:length(TrainingVector)
     plot(AF_blue, 'b-')
     hold on
     plot(AF_red,'r-')
+    
+    plot(find(TrainingVector{i}.targetsRR == 1), 0.5, 'k-')
 
     yline(threshold, 'k-.','LineWidth',1.5);
     ylim([0 0.5])
@@ -147,6 +149,9 @@ for i = 5:length(TestVector)
     plot(AF_blue, 'b-')
     hold on
     plot(AF_red,'r-')
+    
+    plot(find(TrainingVector{i}.targetsRR == 1), 0.5, 'k-')
+    
     yline(threshold, 'k-.','LineWidth',1.5);
     ylim([0 0.5])
     xlabel('Time s');
