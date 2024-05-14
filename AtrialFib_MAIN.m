@@ -200,8 +200,8 @@ performance{end, 2} = sum(cell2mat(TN_tot)) / (sum(cell2mat(FP_tot)) + sum(cell2
 
 % Sensitivity = TP / (TP + FN)
 % Specificity = TN / (FP + TN)
-% Accuracy = (TP + FN) / (TP + TN + FP + FN)
-Accuracy = (sum([TP_tot{5:7}]) + (sum([FN_tot{5:7}]))) / (sum([TP_tot{5:7}]) + sum([TN_tot{5:7}]) + sum([FP_tot{5:7}]) + sum([FN_tot{5:7}])) 
+% Accuracy = (TP + TN) / (TP + TN + FP + FN)
+Accuracy = (sum([TP_tot{1:7}]) + (sum([TN_tot{1:7}]))) / (sum([TP_tot{1:7}]) + sum([TN_tot{1:7}]) + sum([FP_tot{1:7}]) + sum([FN_tot{1:7}])) 
 
 Data_set = ["Patient 1"; "Patient 2"; "Patient 3"; "Patient 4"; "Patient 5"; "Patient 6"; "Patient 7"; "Average"];
 Sensitivity = performance(:, 1);
